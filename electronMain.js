@@ -12,7 +12,7 @@ app.on('ready', () => {
   let url = require('url').format({
     protocol: 'file',
     slashes: true,
-    pathname: require('path').join(__dirname, 'index.html')
+    pathname: require('path').join(__dirname, 'hotreload.html')
   })
   console.log(url)
   mainWindow.loadURL(url)

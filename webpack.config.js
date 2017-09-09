@@ -1,7 +1,7 @@
 var webpack = require('webpack');
 module.exports = {
   entry: {
-  app: ['webpack/hot/dev-server', './javascripts/app.js'],
+  app: ['webpack/hot/dev-server', './src/app.js'],
 },
 output: {
   path: __dirname + './public/built',

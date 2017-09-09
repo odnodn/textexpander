@@ -6,7 +6,7 @@ var HelloBox = React.createClass({
   render: function() {
     return (
       <div className="helloTag">
-      Hello world!!! ElectronReactJs
+      Hello hotreload
       </div>
     );
   }
