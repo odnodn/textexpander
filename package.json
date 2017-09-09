@@ -1,5 +1,5 @@
 {
-  "name": "electron-react-sandbo",
+  "name": "electron-react-sandbox",
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "babel": "babel",
     "webpack": "webpack",
-    "start": "electron ."
+    "start": "electron .",
+    "watch": "./node_modules/.bin/webpack-dev-server"
   },
   "keywords": [],
   "author": "kindone",
@@ -20,6 +21,7 @@
     "electron": "^1.7.6",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "webpack": "^3.5.6"
+    "webpack": "^3.5.6",
+    "webpack-dev-server": "^2.7.1"
   }
 }

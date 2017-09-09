@@ -6,7 +6,7 @@ var HelloBox = React.createClass({
   render: function() {
     return (
       <div className="helloTag">
-      Hello world from ReactJS2
+      Hello world!!! ElectronReactJs
       </div>
     );
   }
