@@ -1,7 +1,7 @@
 var webpack = require('webpack');
 module.exports = {
   entry: {
-  app: ['webpack/hot/dev-server', './src/app.js'],
+  app: ['webpack/hot/dev-server', './src/index.js'],
 },
 output: {
   path: __dirname + './public/built',
@@ -16,6 +16,7 @@ module: {
  loaders: [
    { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/, query: { presets: ['es2015', 'react'] } },
    { test: /\.css$/, loader: 'style-loader!css-loader' },
+   { test: /\.svg$/, loader: 'svg-inline-loader' },
    { test: /\.less$/, loader: 'style-loader!css-loader!less-loader'}
  ]
 },

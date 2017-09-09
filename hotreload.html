@@ -1,12 +1,54 @@
-<html>
- 
-<head><title>Hello World From ReactJS</title></head>
- 
-<body>
-  <div id="helloTag"></div>
-</body>
- 
-<script src="http://localhost:8080/webpack-dev-server.js"></script>
-<script src="http://localhost:8080/built/bundle.js"></script>
- 
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+    <link rel="manifest" href="public/manifest.json">
+    <link rel="shortcut icon" href="public/favicon.ico">
+    <!--
+      Notice the use of public in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "public/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <link rel="stylesheet" type="text/css" href="public/semantic/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="public/semantic/components/reset.css">
+    <link rel="stylesheet" type="text/css" href="public/semantic/components/site.css">
+    <link rel="stylesheet" type="text/css" href="public/semantic/components/grid.css">
+    <!--- Component CSS -->
+    <link rel="stylesheet" type="text/css" href="public/semantic/components/icon.css">
+    <link rel="stylesheet" type="text/css" href="public/semantic/components/input.css">
+    <link rel="stylesheet" type="text/css" href="public/semantic/components/button.css">
+    <link rel="stylesheet" type="text/css" href="public/semantic/components/divider.css">
+    <link rel="stylesheet" type="text/css" href="public/semantic/components/label.css">
+    <link rel="stylesheet" type="text/css" href="public/semantic/components/dropdown.css">
+    <link rel="stylesheet" type="text/css" href="public/semantic/components/transition.css">
+    <link rel="stylesheet" type="text/css" href="public/semantic/components/popup.css">
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+    <script
+      src="https://code.jquery.com/jquery-3.1.1.min.js"
+      integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+      crossorigin="anonymous"></script>
+    <script src="public/semantic/semantic.min.js"></script>
+    <title>React Sandbox</title>
+  </head>
+  <body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <div id="root"></div>
+
+    <script src="http://localhost:8080/webpack-dev-server.js"></script>
+    <script src="http://localhost:8080/built/bundle.js"></script>
+    <script>if (window.module) module = window.module;</script>
+
+  </body>
 </html>
