@@ -8,7 +8,7 @@ import Right from './layouts/Right'
 import Sandbox from './Sandbox'
 
 
-class App extends Component {
+class TrayWindow extends Component {
   render() {
     return (
       <div className="ui container">
@@ -32,4 +32,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default TrayWindow;

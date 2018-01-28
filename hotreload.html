@@ -38,6 +38,13 @@
       integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
       crossorigin="anonymous"></script>
     <script src="public/semantic/semantic.min.js"></script>
+    <script>
+    function loadScript(url) {
+        var scriptTag = document.createElement('script');
+        scriptTag.setAttribute('src', url);
+        document.head.appendChild(scriptTag);
+    }
+    </script>
     <title>React Sandbox</title>
   </head>
   <body>
@@ -47,7 +54,18 @@
     <div id="root"></div>
 
     <script src="http://localhost:8080/webpack-dev-server.js"></script>
-    <script src="http://localhost:8080/built/bundle.js"></script>
+    <!-- <script src="http://localhost:8080/built/bundle.js"></script> -->
+    <script>
+      (function()
+      {
+        var locationString = window.location.href
+        var split = locationString.split("?root=")
+        if(split.length == 2) {
+          var rootName = split[1]
+          loadScript("http://localhost:8080/built/" + rootName + ".js")
+        }
+      })()
+    </script>
     <script>if (window.module) module = window.module;</script>
 
   </body>

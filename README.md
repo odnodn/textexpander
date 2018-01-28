@@ -1,4 +1,4 @@
-# electron_with_reactjs_boilerplate
+# Text Expander
 
 $ npm run-script watch
 $ npm start
