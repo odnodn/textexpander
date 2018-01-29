@@ -34,7 +34,7 @@ const startupTray = (trayWindow) => {
 }
 
 const startupTrayWindow = () => {
-// create browser window hidden
+  // create browser window hidden
   const rootName = 'trayWindow'
   const window = new BrowserWindow({
     width: 300,
@@ -63,20 +63,52 @@ const startupTrayWindow = () => {
 }
 
 const startupSearchWindow = () => {
-// create browser window hidden
-}
+  // create browser window hidden
+  const rootName = 'searchWindow'
+  const window = new BrowserWindow({
+    width: 300,
+    height: 450,
+    show: false,
+    frame: false,
+    fullscreenable: false,
+    resizable: false,
+    transparent: true,
+    webPreferences: {
+      // Prevents renderer process code from not running when window is
+      // hidden
+      backgroundThrottling: false,
+      preload: __dirname + '/preload.js'
+    }
+  })
+  window.loadURL(`file://${path.join(__dirname, 'hotreload.html?root=' + rootName)}`)
 
-const showSearchWindow = () => {
+  // Hide the window when it loses focus
+  window.on('blur', () => {
+    window.hide()
+  })
 
-}
-
-
-
-const bindShortcut = () => {
-  globalShortcut.register('Alt+Space', () => {
-    showSearchWindow()
+  const pasteText = (event, arg) => {
+    // searchWindow.hide()
+    app.hide()
     var robot = require("robotjs")
-    //robot.typeString("Hello World")
+    robot.typeString(arg)
+  }
+
+  ipcMain.on('pasteText', pasteText)
+
+  return window
+}
+
+const showSearchWindow = (searchWindow) => {
+  searchWindow.show()
+
+}
+
+
+
+const bindShortcut = (searchWindow) => {
+  globalShortcut.register('Alt+Space', () => {
+    showSearchWindow(searchWindow)
   })
 }
 
