@@ -88,8 +88,7 @@ const startupSearchWindow = () => {
   })
 
   const pasteText = (event, arg) => {
-    // searchWindow.hide()
-    app.hide()
+    app.hide() // returns focus to previous application (tested on Mac)
     var robot = require("robotjs")
     robot.typeString(arg)
   }
@@ -101,7 +100,9 @@ const startupSearchWindow = () => {
 
 const showSearchWindow = (searchWindow) => {
   searchWindow.show()
-
+  if (process.defaultApp) {
+    searchWindow.openDevTools({mode: 'detach'})
+  }
 }
 
 
