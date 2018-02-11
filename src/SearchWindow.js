@@ -2,9 +2,6 @@ import React, { Component } from 'react'
 import logo from './logo.svg'
 import './App.css'
 // import List from './List'
-import Top from './layouts/Top'
-import Left from './layouts/Left'
-import Right from './layouts/Right'
 import Sandbox from './Sandbox'
 import Autocomplete from 'react-autocomplete'
 
@@ -23,6 +20,12 @@ class SearchWindow extends Component {
     this.getItemValue = this.getItemValue.bind(this)
     this.renderItem = this.renderItem.bind(this)
     this.shouldItemRender = this.shouldItemRender.bind(this)
+
+    if (window.ipcRenderer) {
+  		window.ipcRenderer.on('change', (items) =>  {
+        this.setState({items: items})
+      })
+  	}
   }
 
   shouldItemRender(item, value) {

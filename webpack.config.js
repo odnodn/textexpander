@@ -1,8 +1,8 @@
 var webpack = require('webpack');
 module.exports = {
   entry: {
-    trayWindow: ['webpack/hot/dev-server', './src/trayindex.js'],
-    searchWindow: ['webpack/hot/dev-server', './src/searchindex.js'],
+    mainIndex: ['webpack/hot/dev-server', './src/mainIndex.js'],
+    searchIndex: ['webpack/hot/dev-server', './src/searchIndex.js'],
   },
   output: {
     path: __dirname + './public/built',
@@ -22,6 +22,6 @@ module.exports = {
    ]
   },
   plugins: [
-     new webpack.HotModuleReplacementPlugin()     
+     new webpack.HotModuleReplacementPlugin()
   ]
 }

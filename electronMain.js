@@ -1,49 +1,20 @@
 
-const {app, BrowserWindow, ipcMain, Tray, globalShortcut} = require('electron')
+const {app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, dialog} = require('electron')
 const path = require('path')
+require("babel-register")
 
-const startup = () => {
-  app.dock.hide()
-  const trayWindow = startupTrayWindow()
-  startupTray(trayWindow)
-
-  const searchWindow = startupSearchWindow()
-  bindShortcut(searchWindow)
-}
-
-const startupTray = (trayWindow) => {
-  const assetsDirectory = path.join(__dirname, 'assets')
-  const trayIcon = 'clipboard.png'
-
-  let tray = new Tray(path.join(assetsDirectory, trayIcon))
-
-  const toggleTrayWindow = () => {
-      if (trayWindow.isVisible()) {
-        trayWindow.hide()
-      } else {
-        trayWindow.show()
-        if (trayWindow.isVisible() && process.defaultApp) {
-          trayWindow.openDevTools({mode: 'detach'})
-        }
-      }
-  }
-
-  tray.on('right-click', toggleTrayWindow)
-  tray.on('double-click', toggleTrayWindow)
-  tray.on('click', toggleTrayWindow)
-}
-
-const startupTrayWindow = () => {
+const createMainWindow = () => {
   // create browser window hidden
-  const rootName = 'trayWindow'
+  const rootName = 'mainIndex'
   const window = new BrowserWindow({
-    width: 300,
-    height: 450,
+    width: 800,
+    height: 600,
     show: false,
-    frame: false,
+    frame: true,
     fullscreenable: false,
-    resizable: false,
-    transparent: true,
+    resizable: true,
+    transparent: false,
+    title: 'Manage Phrases',
     webPreferences: {
       // Prevents renderer process code from not running when window is
       // hidden
@@ -51,20 +22,100 @@ const startupTrayWindow = () => {
     }
   })
   window.loadURL(`file://${path.join(__dirname, 'hotreload.html?root=' + rootName)}`)
-
-  // Hide the window when it loses focus
-  window.on('blur', () => {
-    if (!window.webContents.isDevToolsOpened()) {
-      window.hide()
-    }
+  window.on('close', () => {
+    app.dock.hide()
   })
-
   return window
+}
+
+class WindowHandle
+{
+  constructor(lazy) {
+    if(!lazy)
+      this.window = createMainWindow()
+  }
+
+  show() {
+    this.createIfNeeded()
+    this.window.show()
+    this.window.openDevTools({mode: 'detach'})
+    app.dock.show()
+  }
+
+  hide() {
+    this.createIfNeeded()
+    this.window.hide()
+  }
+
+  createIfNeeded() {
+    if(this.window == undefined || this.window.isDestroyed()) {
+      this.window = createMainWindow()
+      this.window.on('closed', () => {
+        this.window = undefined
+      })
+    }
+  }
+}
+
+const startup = () => {
+  app.dock.hide()
+
+
+  const mainWindow = startupMainWindow()
+  startupTray(mainWindow)
+
+  const searchWindow = startupSearchWindow()
+  bindShortcut(searchWindow)
+}
+
+const startupTray = (mainWindow) => {
+  const assetsDirectory = path.join(__dirname, 'assets')
+  const trayIcon = 'clipboard.png'
+
+  let tray = new Tray(path.join(assetsDirectory, trayIcon))
+
+  const contextMenu = Menu.buildFromTemplate([
+    {label: 'About', click() {
+      dialog.showMessageBox(
+        { message: "Text Expander 0.1",
+          buttons: ["OK"] })
+    }},
+    {label: 'Manage Phrases', click() {
+      mainWindow.show()
+    }},
+    {label: 'New Phrase...'},
+    {label: 'Quit'}
+  ])
+  tray.setToolTip('Text Expander')
+  tray.setContextMenu(contextMenu)
+
+  const createNewPhrase = (event, arg) => {
+
+  }
+
+  ipcMain.on('submitNewPhrase', createNewPhrase)
+
+  // const toggleMainWindow = (event) => {
+  //     if (mainWindow.isVisible()) {
+  //       mainWindow.hide()
+  //     } else {
+  //       mainWindow.show()
+  //       if (mainWindow.isVisible() && process.defaultApp) {
+  //         mainWindow.openDevTools({mode: 'detach'})
+  //       }
+  //     }
+  // }
+  // tray.on('double-click', toggleMainWindow)
+}
+
+
+const startupMainWindow = () => {
+  return new WindowHandle()
 }
 
 const startupSearchWindow = () => {
   // create browser window hidden
-  const rootName = 'searchWindow'
+  const rootName = 'searchIndex'
   const window = new BrowserWindow({
     width: 300,
     height: 450,
@@ -104,8 +155,6 @@ const showSearchWindow = (searchWindow) => {
     searchWindow.openDevTools({mode: 'detach'})
   }
 }
-
-
 
 const bindShortcut = (searchWindow) => {
   globalShortcut.register('Alt+Space', () => {

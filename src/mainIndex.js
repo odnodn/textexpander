@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import TrayWindow from './TrayWindow';
+import MainWindow from './MainWindow';
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<TrayWindow />, document.getElementById('root'));
+ReactDOM.render(<MainWindow />, document.getElementById('root'));
 registerServiceWorker();
