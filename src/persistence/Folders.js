@@ -10,7 +10,7 @@ export default class Folders {
   }
 
   list() {
-    return this.acessor.list()
+    return this.accessor.list()
   }
 
   insert(doc) {

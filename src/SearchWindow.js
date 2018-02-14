@@ -5,7 +5,7 @@ import './App.css'
 import Sandbox from './Sandbox'
 import Autocomplete from 'react-autocomplete'
 
-class SearchWindow extends Component {
+export default class SearchWindow extends Component {
   constructor(props) {
     super(props)
     this.state = {value: '', items : [
@@ -77,5 +77,3 @@ class SearchWindow extends Component {
     )
   }
 }
-
-export default SearchWindow

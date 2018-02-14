@@ -10,7 +10,8 @@ class MainWindow extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      treeData: [{ title: 'Chicken', children: [ { title: 'Egg' } ] }],
+      // treeData: [{ title: 'Chicken', children: [ { title: 'Egg' } ] }],
+      treeData:[]
     }
     this.openNewPhraseForm = this.openNewPhraseForm.bind(this)
     this.onSubmitNewPhraseForm = this.onSubmitNewPhraseForm.bind(this)
@@ -25,8 +26,36 @@ class MainWindow extends Component {
   onSubmitNewPhraseForm(event) {
     console.log(event.values)
     if (window.ipcRenderer) {
-  		console.log(window.ipcRenderer)
   		window.ipcRenderer.send('submitNewPhrase', event.values)
+  	}
+  }
+
+  componentDidMount() {
+    this.loadData()
+    if (window.ipcRenderer) {
+      // created phrase
+      window.ipcRenderer.on('createdPhrase', (event, phrase) => {
+        console.log('createdPhrase', phrase)
+        // TODO: more sophisticated handling rather than loading the whole
+        this.loadData()
+      })
+    }
+  }
+
+  loadData() {
+    if (window.ipcRenderer) {
+      window.ipcRenderer.once('loadData', (event, phrases) => {
+        let treeData = []
+        for(let i = 0; i < phrases.length; i++)
+        {
+          const phrase = phrases[i]
+          treeData.push({title: phrase.shortText})
+        }
+        // treeData.push({title: "", children: root})
+        this.setState({treeData: treeData})
+        console.log(treeData)
+      })
+  		window.ipcRenderer.send('loadData')
   	}
   }
 

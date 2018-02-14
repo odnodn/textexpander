@@ -17,7 +17,7 @@ export default class NeDB
     this.phraseDB = new Datastore({filename : phraseDBPath, autoload: true});
 
     this.folders = new Folders(this.folderDB)
-    this.phrases = new Phrases(this.phraseDB)
+    this.phrases = new Phrases(this.phraseDB)    
     instance = this
   }
 }
