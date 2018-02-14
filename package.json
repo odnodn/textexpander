@@ -13,6 +13,7 @@
     "babel": "babel",
     "webpack": "webpack",
     "start": "electron .",
+    "postinstall": "install-app-deps",
     "watch": "./node_modules/.bin/webpack-dev-server"
   },
   "keywords": [],
@@ -27,6 +28,7 @@
     "chai-as-promised": "^7.1.1",
     "css-loader": "^0.28.7",
     "electron": "^1.7.11",
+    "electron-builder": "^20.0.4",
     "mocha": "^5.0.0",
     "react": "^15.6.1",
     "react-autocomplete": "^1.7.2",
@@ -42,7 +44,8 @@
   },
   "dependencies": {
     "babel-cli": "^6.26.0",
-    "nedb": "^1.8.0"
+    "nedb": "^1.8.0",
+    "sqlite3": "^3.1.13"
   },
   "babel": {
     "presets": [
