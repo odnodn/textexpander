@@ -1,4 +1,4 @@
-import Folders from '../src/persistence/Folders';
+import Folders from '../src/persistence/NeDB/Folders';
 import NeDB from '../src/persistence/NeDB'
 import Folder from '../src/data/Folder';
 

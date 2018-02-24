@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 export default class TopMenu extends Component {
   constructor(props) {
     super(props)
-
   }
 
   componentDidMount() {
@@ -18,7 +17,7 @@ export default class TopMenu extends Component {
           <i className="dropdown icon"></i>
           <div className="menu">
             <div className="item" onClick={this.props.onNewPhraseButtonClicked}><i className="comment outline icon"></i> New Phrase</div>
-            <div className="item"><i className="folder open outline icon"></i> New Folder</div>
+            <div className="item" onClick={this.props.onNewFolderButtonClicked}><i className="folder open outline icon"></i> New Folder</div>
           </div>
         </div>
       </div>
@@ -26,7 +25,6 @@ export default class TopMenu extends Component {
   }
 
   render() {
-    const oldbutton = <div className="ui primary icon button" onClick={this.props.onNewPhraseButtonClicked}><i className="plus icon"/></div>
     return(
       <div className="ui stackable menu">
         <div className="ui container">

@@ -1,6 +1,6 @@
-import NeDBAccessor from "./NeDBAccessor"
+import NeDBAccessor from "../NeDBAccessor"
 
-export default class Folders {
+export default class Phrases {
   constructor(neDB) {
     this.accessor = new NeDBAccessor(neDB)
   }

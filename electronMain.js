@@ -7,10 +7,12 @@ require("babel-register")
 // const NeDBCompat = require(path.join(__dirname, 'persistence-compat.js'))
 // console.log(NeDBCompat.listPhrases())
 
-const NeDB = require(path.join(__dirname, 'src/persistence/NeDB.js')).default
+// const NeDB = require(path.join(__dirname, 'src/persistence/NeDB.js')).default
+// const db = new NeDB('./db/')
+const SQLite = require(path.join(__dirname, 'src/persistence/SQLite.js')).default
 const Phrase = require(path.join(__dirname, 'src/data/Phrase.js')).default
 const Folder = require(path.join(__dirname, 'src/data/Folder.js')).default
-const db = new NeDB('./db/')
+const db = new SQLite('./db/default.sqlite')
 
 
 const createMainWindow = () => {
@@ -101,7 +103,7 @@ const startupTray = (mainWindow) => {
   tray.setContextMenu(contextMenu)
 
   const createNewPhrase = (event, form) => {
-    db.phrases.insert(new Phrase(form.ShortText, form.FullText, form.Folder))
+    db.phrases.insert(Phrase.create(form.shortText, form.fullText, form.folderId))
       .then((doc) => {
       event.sender.send('createdPhrase', doc)
     })
@@ -109,16 +111,22 @@ const startupTray = (mainWindow) => {
 
   // TODO
   const createNewFolder = (event, form) => {
-    db.folders.insert(new Folder(form.Name, form.Description, form.Subfolders))
+    db.folders.insert(Folder.create(form.name, form.description, form.parentId))
+      .then((doc) => {
+      event.sender.send('createdFolder', doc)
+    })
   }
 
   const loadData = (event) => {
-    db.phrases.list().then((docs) => {
-      event.sender.send('loadData', docs)
+    db.phrases.list().then((phrases) => {
+      db.folders.list().then((folders) => {
+        event.sender.send('loadData', {folders:folders, phrases:phrases})
+      })
     })
   }
 
   ipcMain.on('submitNewPhrase', createNewPhrase)
+  ipcMain.on('submitNewFolder', createNewFolder)
   ipcMain.on('loadData', loadData)
 }
 

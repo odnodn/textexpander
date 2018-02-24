@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-export default class NewPhraseForm extends Component
+export default class NewFolderForm extends Component
 {
   constructor(props) {
     super(props)
@@ -10,11 +10,10 @@ export default class NewPhraseForm extends Component
   }
 
   componentDidMount() {
-    $('#NewPhraseForm')
+    $('#NewFolderForm')
       .form({
         fields: {
-          shortText: 'empty',
-          fullText: 'empty'
+          name: 'empty'
         },
         inline: true,
         onSuccess: () => {
@@ -23,18 +22,18 @@ export default class NewPhraseForm extends Component
         }
       })
 
-    $('#NewPhraseFormModal').modal('onShow', () => {
+    $('#NewFolderFormModal').modal('onShow', () => {
       this.clearForm()
     })
   }
 
   clearForm() {
-    $('#NewPhraseForm')
+    $('#NewFolderForm')
       .form('clear')
   }
 
   submit(event) {
-    $('#NewPhraseForm')
+    $('#NewFolderForm')
       .form('validate form')
     event.preventDefault()
   }
@@ -44,41 +43,41 @@ export default class NewPhraseForm extends Component
   }
 
   dispatchSubmitEvent() {
-    const values = $('#NewPhraseForm').form('get values')
+    const values = $('#NewFolderForm').form('get values')
     if(this.onSubmit)
       this.onSubmit({values:values})
   }
 
   render() {
     return (
-      <div className="ui modal" id="NewPhraseFormModal">
+      <div className="ui modal" id="NewFolderFormModal">
         <i className="close icon"></i>
         <div className="header">
-          Create New Phrase
+          Create New Folder
         </div>
         <div className="content">
-          <form className="ui form" id="NewPhraseForm">
+          <form className="ui form" id="NewFolderForm">
             <div className="required field">
               <label>Name</label>
               <div className="ui icon input">
-                <input type="text" name="shortText" placeholder="Short text..."/>
+                <input type="text" name="name" placeholder="Name of the folder"/>
                 <i className="comment outline icon"></i>
               </div>
             </div>
-            <div className="field">
-              <label>Folder</label>
-              <select name="folderId" className="ui fluid dropdown">
-                <option value="-1">(Default)</option>
+            <div className="required field">
+              <label>Parent Folder</label>
+              <select name="parentId" className="ui fluid dropdown">
+                <option value="-1">(Root)</option>
                 {this.props.folders.map((folder) => {
                   return <option key={folder.id} value={folder.id}>{folder.name}</option>
                 })}
               </select>
             </div>
 
-            <div className="required field">
-              <label>Phrase</label>
+            <div className="field">
+              <label>Description</label>
               <div className="ui icon input">
-                <textarea name="fullText" placeholder="Expanded text..."/>
+                <textarea name="description" placeholder="Optional description"/>
                 <i className="comment outline icon"></i>
               </div>
             </div>
