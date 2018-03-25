@@ -1,4 +1,5 @@
 import SQLite from '../src/persistence/SQLite'
+import SQLiteAccessor from '../src/persistence/SQLiteAccessor'
 import Folder from "../src/data/Folder"
 import Phrase from "../src/data/Phrase"
 
@@ -120,7 +121,13 @@ describe('SQLite object', function () {
       done()
     })
 
-    sqlite.phrases.move(1, 2).then(() => {
+    sqlite.phrases.find(2).then((phrase) => {
+      console.log('found phrase: ', phrase)
+    })
+
+
+
+    sqlite.phrases.move({id:2, parentid:-1, idx:0}, -1).then(() => {
       console.log('moved phrase')
     }).catch((err) => {
       console.log('could not move phrase: ', err)
@@ -140,10 +147,126 @@ describe('SQLite object', function () {
         console.log('could not find phrase')
     }).catch((err) => {
       console.log('could not find phrase: ', err)
-      done()
+
     })
 
-    sqlite.close()
+    let accessor = new SQLiteAccessor(sqlite.db)
+
+    accessor.beginTransaction().then((transaction) => {
+      console.log("tx1: transaction begin")
+      return accessor.runWithTransaction(transaction, "UPDATE PHRASES SET ID=ID+10", [])
+    }).then((transaction) => {
+      return accessor.runWithTransaction(transaction, "UPDATE PHRASES SET ID=ID-1", [])
+    }).then((transaction) => {
+      return transaction.commit((err) => {
+        if(err) {
+          console.log("tx1: commit error: ", err)
+          return
+        }
+        sqlite.phrases.list().then((phrases) => {
+          phrases.map((phrase) => {
+            console.log('tx1: found phrase: ', phrase)
+          })
+        }).then(() => {
+          console.log("tx1: transaction end")
+        })
+      })
+    })
+
+    // failing tx2
+    accessor.beginTransaction().then((transaction) => {
+      console.log("tx2: transaction begin")
+      return accessor.runWithTransaction(transaction, "UPDATE PHRASES SET ID=ID+10", [])
+    }).then((transaction) => {
+      return accessor.runWithTransaction(transaction, "UPDATE PHRASE SET ID=ID-1", [])
+    }).then((transaction) => {
+      return transaction.commit((err) => {
+        if(err) {
+          console.log("tx2: commit error: ", err)
+          return
+        }
+        sqlite.phrases.list().then((phrases) => {
+          phrases.map((phrase) => {
+            console.log('tx2: found phrase: ', phrase)
+          })
+        }).then(() => {
+          console.log("tx2: transaction end")
+        })
+      })
+    }).catch((err, transaction) => {
+      console.log("tx2: transaction failed", err, transaction)
+    })
+
+    // self-failing tx3
+    accessor.beginTransaction().then((transaction) => {
+      console.log("tx3: transaction begin")
+      return accessor.runWithTransaction(transaction, "UPDATE PHRASES SET ID=ID+10", [])
+    }).then((transaction) => {
+      return accessor.getWithTransaction(transaction, "SELECT count(*) FROM PHRASES", [])
+    }).then(({transaction, row}) => {
+      console.log("tx3 result:", row)
+      transaction.rollback(() => {})
+      throw 'terminate'
+      // return transaction
+    }).then((transaction) => {
+      return transaction.commit((err) => {
+        if(err) {
+          console.log("tx3: commit error: ", err)
+          return
+        }
+        sqlite.phrases.list().then((phrases) => {
+          phrases.map((phrase) => {
+            console.log('tx3: found phrase: ', phrase)
+          })
+        }).then(() => {
+          console.log("tx3: transaction end")
+        })
+      })
+    }).catch((err) => {
+      console.log("tx3: transaction failed", err)
+    })
+
+    // failing transaction due to typo
+    accessor.runInTransaction([
+      {sql:"UPDATE PHRASES SET ID=ID+10", params:[]},
+      {sql:"UPDATE PHRASE SET ID=ID*2", params:[]}
+    ]).then((...args) =>{
+      console.log("transaction succeeded: ", args)
+      sqlite.phrases.list().then((phrases) => {
+        phrases.map((phrase) => {
+          console.log('found phrase: ', phrase)
+        })
+      })
+    }).catch((errs) => {
+      console.log("transaction failed: ", errs)
+      sqlite.phrases.list().then((phrases) => {
+        phrases.map((phrase) => {
+          console.log('found phrase: ', phrase)
+        })
+      })
+    })
+
+    // successful transaction
+    accessor.runInTransaction([
+      {sql:"UPDATE PHRASES SET ID=ID+2", params:[]},
+      {sql:"UPDATE PHRASES SET ID=ID*2", params:[]}
+    ]).then((...args) =>{
+      console.log("transaction succeeded: ", args)
+      sqlite.phrases.list().then((phrases) => {
+        phrases.map((phrase) => {
+          console.log('found phrase: ', phrase)
+        })
+        done()
+      })
+    }).catch((errs) => {
+      console.log("transaction failed: ", errs)
+      sqlite.phrases.list().then((phrases) => {
+        phrases.map((phrase) => {
+          console.log('found phrase: ', phrase)
+        })
+        done()
+      })
+    })
 
   })
 

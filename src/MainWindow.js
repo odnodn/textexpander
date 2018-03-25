@@ -58,6 +58,12 @@ class MainWindow extends Component {
         // TODO: more sophisticated handling rather than loading the whole
         this.loadData()
       })
+      window.ipcRenderer.on('createdFolder', (event, phrase) => {
+        console.log('createdFolder', phrase)
+        // TODO: more sophisticated handling rather than loading the whole
+        this.loadData()
+      })
+
     }
   }
 
@@ -88,8 +94,8 @@ class MainWindow extends Component {
         this.setState({treeData: treeData, folders:data.folders})
         console.log(treeData, data.folders)
       })
-  		window.ipcRenderer.send('loadData')
-  	}
+      window.ipcRenderer.send('loadData')
+    }
   }
 
   render() {

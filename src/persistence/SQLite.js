@@ -3,6 +3,7 @@ import Phrases from "./SQLite/Phrases"
 import SQLiteAccessor from "./SQLiteAccessor"
 
 const sqlite3 = require('sqlite3').verbose()
+const TransactionDatabase = require("sqlite3-transactions").TransactionDatabase
 
 
 export default class SQLite
@@ -16,13 +17,13 @@ export default class SQLite
   }
 
   open(path) {
-    this.db = new sqlite3.Database(path,(err) => {
+    this.db = new TransactionDatabase(new sqlite3.Database(path,(err) => {
       if (err) {
         this.errorMessage = err.message
         return console.error(err.message)
       }
       console.log('Connected to the SQLite database.')
-    })
+    }))
     this.init()
     this.folders = new Folders(this.db)
     this.phrases = new Phrases(this.db)

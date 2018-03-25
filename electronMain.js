@@ -3,12 +3,6 @@ const {app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, dialog} = requir
 
 const path = require('path')
 require("babel-register")
-// console.log(__dirname)
-// const NeDBCompat = require(path.join(__dirname, 'persistence-compat.js'))
-// console.log(NeDBCompat.listPhrases())
-
-// const NeDB = require(path.join(__dirname, 'src/persistence/NeDB.js')).default
-// const db = new NeDB('./db/')
 const SQLite = require(path.join(__dirname, 'src/persistence/SQLite.js')).default
 const Phrase = require(path.join(__dirname, 'src/data/Phrase.js')).default
 const Folder = require(path.join(__dirname, 'src/data/Folder.js')).default
@@ -109,7 +103,6 @@ const startupTray = (mainWindow) => {
     })
   }
 
-  // TODO
   const createNewFolder = (event, form) => {
     db.folders.insert(Folder.create(form.name, form.description, form.parentId))
       .then((doc) => {

@@ -16,7 +16,7 @@ export default class TreeNavigation extends Component
 
   onChange(treeData) {
     console.log('onChange', treeData)
-    this.setState({ treeData: treeData })
+    this.setState({ treeData })
     if(this.changeCallback)
       this.changeCallback(treeData)
   }
@@ -26,10 +26,11 @@ export default class TreeNavigation extends Component
   }
 
   render() {
+    const treeData = this.props.treeData
     return (
       <div style={{ height: 300 }}>
         <SortableTree
-          treeData={this.props.treeData}
+          treeData={treeData}
           onChange={this.onChange}
           onMoveNode={this.onMoveNode}
           theme={FileExplorerTheme}

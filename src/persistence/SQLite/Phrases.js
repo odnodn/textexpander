@@ -6,7 +6,7 @@ export default class Phrases {
     // TIP: ID auto increments in SQLITE even without any flag
     return "CREATE TABLE IF NOT EXISTS PHRASES (id INTEGER PRIMARY KEY, " +
       "shortText VARCHAR(255), fullText VARCHAR(1024), " +
-      "folderId BIGINT DEFAULT -1)"
+      "folderId BIGINT DEFAULT -1, idx INTEGER DEFAULT 0)"
   }
 
   constructor(sqlite) {
